@@ -66,5 +66,24 @@ public class UserController {
         UserOutputDTO userNotFound = new UserOutputDTO(response, response, response);
         return userNotFound;
     }
+
+    @PutMapping("/{id}")
+    public UserOutputDTO updateUser(@PathVariable("id") String id, @RequestBody CreateUserInputDTO input){
+        int position = 0;
+        for (UserOutputDTO user: this.users){
+            if(user.getId().equals(id)){
+
+                //this.users.remove(position);
+                UserOutputDTO userToUpdate = new UserOutputDTO(id, input.getName(), input.getEmail());
+                this.users.set(position, userToUpdate);
+                return userToUpdate;
+            }
+            position += 1;
+        }
+
+        String response = "El usuario con id: "+ id + " no fue encontrado";
+        UserOutputDTO userNotFound = new UserOutputDTO(response, response, response);
+        return userNotFound;
+    }
 }
 
