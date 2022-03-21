@@ -18,16 +18,26 @@ public class UserController {
     @PostMapping
     public UserOutputDTO createUser(@RequestBody CreateUserInputDTO input){
 
+        // validar que el nombre de usuario y correo no este sin informacion  (isEmpty())
+        if(input.getName().isEmpty() || input.getEmail().isEmpty()){
+            String response = "Los campos son obligatorios";
+            UserOutputDTO responseIfFildIsEmpty = new UserOutputDTO(response, response, response);
+            return responseIfFildIsEmpty;
+        }
+
+        // validar que el email del nuevo usuario no haya sido creado. (size())
         if(this.users.size() > 0){
             for (UserOutputDTO user: this.users){
                 if(user.getEmail().equals(input.getEmail())){
                     String responseIfUserAlreadyExist = "El correo: "+input.getEmail()+" ya esta registrado";
                     UserOutputDTO userAlreadyExist = new UserOutputDTO(responseIfUserAlreadyExist, responseIfUserAlreadyExist, responseIfUserAlreadyExist);
-                    userAlreadyExist.setName(responseIfUserAlreadyExist);
                     return userAlreadyExist;
                 }
             }
         }
+
+        // 
+
         String id = UUID.randomUUID().toString();
         UserOutputDTO userToAdd = new UserOutputDTO(id, input.getName(), input.getEmail());
         this.users.add(userToAdd);
