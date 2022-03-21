@@ -73,7 +73,6 @@ public class UserController {
         for (UserOutputDTO user: this.users){
             if(user.getId().equals(id)){
 
-                //this.users.remove(position);
                 UserOutputDTO userToUpdate = new UserOutputDTO(id, input.getName(), input.getEmail());
                 this.users.set(position, userToUpdate);
                 return userToUpdate;
@@ -84,6 +83,22 @@ public class UserController {
         String response = "El usuario con id: "+ id + " no fue encontrado";
         UserOutputDTO userNotFound = new UserOutputDTO(response, response, response);
         return userNotFound;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable("id") String id){
+        int position = 0;
+        for (UserOutputDTO user: this.users){
+            if(user.getId().equals(id)){
+
+                this.users.remove(position);
+                return "Usuario eliminado";
+            }
+            position += 1;
+        }
+
+        String response = "El usuario con id: "+ id + " no fue encontrado";
+        return response;
     }
 }
 
