@@ -17,7 +17,7 @@ public class UserController {
 
     @PostMapping
     public UserOutputDTO createUser(@RequestBody CreateUserInputDTO input){
-
+        // Crear campos user y password para el registro
         // validar que el nombre de usuario y correo no este sin informacion  (isEmpty())
         if(input.getName().isEmpty() || input.getEmail().isEmpty()){
             String response = "Los campos son obligatorios";
