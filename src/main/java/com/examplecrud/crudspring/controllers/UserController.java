@@ -17,11 +17,11 @@ public class UserController {
 
     @PostMapping
     public UserOutputDTO createUser(@RequestBody CreateUserInputDTO input){
-        // Crear campos user y password para el registro
-        // validar que el nombre de usuario y correo no este sin informacion  (isEmpty())
-        if(input.getName().isEmpty() || input.getEmail().isEmpty()){
+        // Agregar campos user y password para el registro.
+        // validar que el nombre, el usuario, el correo y el password son OBLIGATORIOS, no esten sin informacion  (isEmpty())
+        if(input.getName().isEmpty() || input.getUser().isEmpty() || input.getEmail().isEmpty() || input.getPassword().isEmpty()){
             String response = "Los campos son obligatorios";
-            UserOutputDTO responseIfFildIsEmpty = new UserOutputDTO(response, response, response);
+            UserOutputDTO responseIfFildIsEmpty = new UserOutputDTO(response, response, response, response, response);
             return responseIfFildIsEmpty;
         }
 
@@ -30,7 +30,7 @@ public class UserController {
             for (UserOutputDTO user: this.users){
                 if(user.getEmail().equals(input.getEmail())){
                     String responseIfUserAlreadyExist = "El correo: "+input.getEmail()+" ya esta registrado";
-                    UserOutputDTO userAlreadyExist = new UserOutputDTO(responseIfUserAlreadyExist, responseIfUserAlreadyExist, responseIfUserAlreadyExist);
+                    UserOutputDTO userAlreadyExist = new UserOutputDTO(responseIfUserAlreadyExist, responseIfUserAlreadyExist, responseIfUserAlreadyExist, responseIfUserAlreadyExist, responseIfUserAlreadyExist);
                     return userAlreadyExist;
                 }
             }
@@ -39,7 +39,7 @@ public class UserController {
         // 
 
         String id = UUID.randomUUID().toString();
-        UserOutputDTO userToAdd = new UserOutputDTO(id, input.getName(), input.getEmail());
+        UserOutputDTO userToAdd = new UserOutputDTO(id, input.getName(), input.getUser(), input.getEmail(), input.getPassword());
         this.users.add(userToAdd);
         return userToAdd;
 
@@ -63,7 +63,7 @@ public class UserController {
             }
         }
         String response = "El usuario con id: "+ id + " no fue encontrado";
-        UserOutputDTO userNotFound = new UserOutputDTO(response, response, response);
+        UserOutputDTO userNotFound = new UserOutputDTO(response, response, response, response, response);
         return userNotFound;
     }
 
@@ -73,7 +73,7 @@ public class UserController {
         for (UserOutputDTO user: this.users){
             if(user.getId().equals(id)){
 
-                UserOutputDTO userToUpdate = new UserOutputDTO(id, input.getName(), input.getEmail());
+                UserOutputDTO userToUpdate = new UserOutputDTO(id, input.getName(), input.getUser(), input.getEmail(), input.getPassword());
                 this.users.set(position, userToUpdate);
                 return userToUpdate;
             }
@@ -81,7 +81,7 @@ public class UserController {
         }
 
         String response = "El usuario con id: "+ id + " no fue encontrado";
-        UserOutputDTO userNotFound = new UserOutputDTO(response, response, response);
+        UserOutputDTO userNotFound = new UserOutputDTO(response, response, response, response, response);
         return userNotFound;
     }
 
