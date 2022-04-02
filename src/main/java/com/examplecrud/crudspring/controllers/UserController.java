@@ -5,6 +5,7 @@ import com.examplecrud.crudspring.controllers.dto.UserOutputDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class UserController {
 
     }
 
-   /* @GetMapping
+    @GetMapping
     public List<UserOutputDTO> getUsers(){
 
         return this.users;
@@ -54,7 +55,7 @@ public class UserController {
         // Dominar bien las listas: ArrayList.
         // investigar stateless
         // queryParamts, buscar por nombre y correo
-    }*/
+    }
     /* Declaración de un Map (un HashMap) con clave "Integer" y Valor "String". Las claves pueden ser de cualquier tipo de objetos, aunque los más utilizados como clave son los objetos predefinidos de Java como String, Integer, Double ... !!!!CUIDADO los Map no permiten datos atómicos
     Map<Integer, String> nombreMap = new HashMap<Integer, String>();
     nombreMap.size(); // Devuelve el numero de elementos del Map
@@ -69,28 +70,44 @@ public class UserController {
 
 
     @GetMapping
-    public List<UserOutputDTO> getUsers(@RequestParam Map<String, String> queryFields) {
+    public List<UserOutputDTO> getUsersByEmail(@RequestParam Map<String, String> queryFields) {
         // UserOutputDTO output =new UserOutputDTO(queryFields.entrySet());
-        System.out.println(queryFields.entrySet());
+        /*System.out.println(queryFields.entrySet());
         System.out.println(queryFields.values());
         System.out.println(queryFields.containsKey("id"));
-        System.out.println(queryFields.get("id"));
+        System.out.println(queryFields.get("id"));*/
         // [id=27817b24-3c3d-4b36-b9ef-4daf7bb29676, name=Andres]
+       /* for (UserOutputDTO user : this.users) {
+            System.out.println(queryFields.get("id"));
+            System.out.println(user.getId().equals(queryFields.get("id")));
+            System.out.println(queryFields.get("id").getClass().getName());
+            //System.out.println(user.getId().equals(queryFields.get("id"));
+        }*/
 
-        if (!queryFields.containsKey("id") || !queryFields.containsKey("email")) {
-            String response = "Los valores de claves no son correctos";
+
+        List<UserOutputDTO> dataFound = new ArrayList<>();
+        if(queryFields.containsKey("id") && queryFields.containsKey("email")){
+            for (UserOutputDTO user : this.users) {
+                if (user.getId().equals(queryFields.get("id")) && user.getEmail().equals(queryFields.get("email"))){
+                    dataFound.add(user);
+                } else {
+                    String response = "No hay registros que coincidan";
+                    UserOutputDTO userNotFound = new UserOutputDTO(response, response, response, response, response);
+                    List<UserOutputDTO> responseNotFound = new ArrayList<>();
+                    responseNotFound.add(userNotFound);
+                    return responseNotFound;
+                }
+            }
+        }
+       if (!queryFields.containsKey("id") || !queryFields.containsKey("email")) {
+            String response = "Los parametros no son correctos";
             UserOutputDTO userNotFound = new UserOutputDTO(response, response, response, response, response);
             List<UserOutputDTO> pathNotFound = new ArrayList<>();
             pathNotFound.add(userNotFound);
             return pathNotFound;
         }
 
-             for (UserOutputDTO user : this.users) {
-                if (user.getId().equals(queryFields.get("id"))) {
-                    return this.users;
-                }
-            }
-        return this.users;
+        return dataFound;
     }
 
     @GetMapping("/{id}")
