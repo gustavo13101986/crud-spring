@@ -70,7 +70,7 @@ public class UserController {
 
 
     @GetMapping
-    public List<UserOutputDTO> getUsersByEmail(@RequestParam Map<String, String> queryFields) {
+    public List<UserOutputDTO> getUserByEmail(@RequestParam Map<String, String> queryFields) {
         // UserOutputDTO output =new UserOutputDTO(queryFields.entrySet());
         /*System.out.println(queryFields.entrySet());
         System.out.println(queryFields.values());
